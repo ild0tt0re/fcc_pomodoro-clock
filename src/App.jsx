@@ -4,8 +4,8 @@ import './styles/App.scss';
 const initialTimerLabelState = 'Session';
 const initialIsTimerOnState = false;
 
-const initialSessionLengthState = 10;/* 1500; */
-const initialBreakLengthState = 10;/* 300; */
+const initialSessionLengthState = /* 10; */1500;
+const initialBreakLengthState = /* 10; */300;
 
 function App() {
   const [timerLabel, setTimerLabel] = useState(initialTimerLabelState);
@@ -92,6 +92,7 @@ function App() {
 
   const resetTimer = (e) => {
     setIsTimerOn(false);
+    setTimerLabel(initialTimerLabelState)
     setSessionLengthTime(initialSessionLengthState);
     setBreakLengthTime(initialBreakLengthState);
     setTimeLeft(initialSessionLengthState);
