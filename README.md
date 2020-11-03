@@ -1,4 +1,4 @@
-# FRONT END LIBRARIES PROJECT | BUILD A 25 + 5 (POMODORO) Clock
+# FRONT END LIBRARIES PROJECT | BUILD A 25 + 5 (POMODORO) CLOCK
 ![Project-preview](pomodoro-clock-preview.png)
 > This is the fifth project of _freeCodeCamp "Front End Libraries Projects" Certification_
 
