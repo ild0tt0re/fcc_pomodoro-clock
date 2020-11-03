@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import './styles/App.scss';
 
 const initialTimerLabelState = 'Session';
 const initialIsTimerOnState = false;
 
-const initialSessionLengthState = /* 10; */1500;
-const initialBreakLengthState = /* 10; */300;
+const initialSessionLengthState = 1500;
+const initialBreakLengthState = 300;
 
 function App() {
   const [timerLabel, setTimerLabel] = useState(initialTimerLabelState);
@@ -20,12 +20,15 @@ function App() {
 
   const [isTimerOn, setIsTimerOn] = useState(initialIsTimerOnState);
 
+  const audioEl = useRef(null);
+
   useEffect(() => {
     if (timerLabel === initialTimerLabelState) {
       setTimeLeft(sessionLengthTime);
     } else {
       setTimeLeft(breakLengthTime);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timerLabel]);
 
   useEffect(() => {
@@ -36,6 +39,24 @@ function App() {
         setTimeLeft(timeLeft - 1);
         console.log('timeLeft: ', timeLeft);
 
+        if (timeLeft === 1) {
+          function playAudio() {
+            var playPromise = audioEl.current.play();
+
+            if (playPromise !== undefined) {
+              playPromise
+                .then((_) => {
+                  setTimeout(() => {
+                    audioEl.current.pause();
+                  }, 1000);
+                })
+                .catch((error) => {
+                  console.error('Error while play audio...', error);
+                });
+            }
+          }
+          playAudio();
+        }
         if (timeLeft === 0) {
           function switchTimer(params) {
             if (timerLabel === initialTimerLabelState) {
@@ -56,6 +77,7 @@ function App() {
     return () => {
       clearInterval(interval);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isTimerOn, timeLeft]);
 
   const incrementSessionLengthTime = (e) => {
@@ -92,10 +114,12 @@ function App() {
 
   const resetTimer = (e) => {
     setIsTimerOn(false);
-    setTimerLabel(initialTimerLabelState)
+    setTimerLabel(initialTimerLabelState);
     setSessionLengthTime(initialSessionLengthState);
     setBreakLengthTime(initialBreakLengthState);
     setTimeLeft(initialSessionLengthState);
+    audioEl.current.pause();
+    audioEl.current.currentTime = 0;
   };
 
   return (
@@ -150,6 +174,15 @@ function App() {
             -
           </button>
         </div>
+        <audio
+          id="beep"
+          preload="auto"
+          ref={audioEl}
+        >
+          <source src="/src/assets/BeepSound.wav" type="audio/wav" />
+          Your browser does not support the
+          <code>audio</code> element.
+        </audio>
       </div>
     </div>
   );
