@@ -41,13 +41,14 @@ function App() {
 
         if (timeLeft === 1) {
           function playAudio() {
-            var playPromise = audioEl.current.play();
+            let playPromise = audioEl.current.play();
 
             if (playPromise !== undefined) {
               playPromise
                 .then((_) => {
                   setTimeout(() => {
                     audioEl.current.pause();
+                    audioEl.current.currentTime = 0;
                   }, 1000);
                 })
                 .catch((error) => {
@@ -58,7 +59,7 @@ function App() {
           playAudio();
         }
         if (timeLeft === 0) {
-          function switchTimer(params) {
+          function switchTimer() {
             if (timerLabel === initialTimerLabelState) {
               setTimerLabel('Break');
               setTimeLeft(sessionLengthTime);
@@ -118,8 +119,11 @@ function App() {
     setSessionLengthTime(initialSessionLengthState);
     setBreakLengthTime(initialBreakLengthState);
     setTimeLeft(initialSessionLengthState);
-    audioEl.current.pause();
-    audioEl.current.currentTime = 0;
+    
+    if (!audioEl.current.paused) {
+      audioEl.current.pause();
+      audioEl.current.currentTime = 0;
+    }
   };
 
   return (
@@ -174,11 +178,7 @@ function App() {
             -
           </button>
         </div>
-        <audio
-          id="beep"
-          preload="auto"
-          ref={audioEl}
-        >
+        <audio id="beep" preload="auto" ref={audioEl}>
           <source src="/src/assets/BeepSound.wav" type="audio/wav" />
           Your browser does not support the
           <code>audio</code> element.
