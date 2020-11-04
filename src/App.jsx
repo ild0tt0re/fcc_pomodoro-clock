@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import CircularTimer from './components/CircularTimer';
 import QuantitySelector from './components/QuantitySelector';
 import './styles/App.scss';
 
@@ -130,24 +131,20 @@ function App() {
   return (
     <div className="App">
       <div className="pomodoro-wrapper">
-        <div id="timer-label">{timerLabel}</div>
-        <div id="time-left">
-          {String(parseInt(timeLeft / 60)).padStart(2, 0)}:
-          {String(timeLeft - parseInt(timeLeft / 60) * 60).padStart(2, 0)}
-        </div>
-        <button id="start_stop" onClick={startStopTimer}>
-          Start/Pause
-        </button>
-        <button id="reset" onClick={resetTimer}>
-          reset
-        </button>
-
+        <CircularTimer
+          timerLabel={timerLabel}
+          timeLeft={timeLeft}
+          resetTimer={resetTimer}
+        />
         <QuantitySelector
           name="session"
           lengthTime={sessionLengthTime}
           incrementLengthTime={incrementSessionLengthTime}
           decrementLengthTime={decrementSessionLengthTime}
         />
+        <button id="start_stop" onClick={startStopTimer}>
+          Start/Pause
+        </button>
         <QuantitySelector
           name="break"
           lengthTime={breakLengthTime}
