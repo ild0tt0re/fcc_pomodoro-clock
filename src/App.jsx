@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import QuantitySelector from './components/QuantitySelector';
 import './styles/App.scss';
 
 const initialTimerLabelState = 'Session';
@@ -119,7 +120,7 @@ function App() {
     setSessionLengthTime(initialSessionLengthState);
     setBreakLengthTime(initialBreakLengthState);
     setTimeLeft(initialSessionLengthState);
-    
+
     if (!audioEl.current.paused) {
       audioEl.current.pause();
       audioEl.current.currentTime = 0;
@@ -141,43 +142,18 @@ function App() {
           reset
         </button>
 
-        <div className="session-container">
-          <div id="session-label">Session Length</div>
-          <button
-            id="session-increment"
-            onClick={incrementSessionLengthTime}
-            disabled={sessionLengthTime / 60 === 60}
-          >
-            +
-          </button>
-          <div id="session-length">{sessionLengthTime / 60}</div>
-          <button
-            id="session-decrement"
-            onClick={decrementSessionLengthTime}
-            disabled={sessionLengthTime / 60 === 1}
-          >
-            -
-          </button>
-        </div>
-
-        <div className="break-container">
-          <div id="break-label">Break Length</div>
-          <button
-            id="break-increment"
-            onClick={incrementBreakLengthTime}
-            disabled={breakLengthTime / 60 === 60}
-          >
-            +
-          </button>
-          <div id="break-length">{breakLengthTime / 60}</div>
-          <button
-            id="break-decrement"
-            onClick={decrementBreakLengthTime}
-            disabled={breakLengthTime / 60 === 1}
-          >
-            -
-          </button>
-        </div>
+        <QuantitySelector
+          name="session"
+          lengthTime={sessionLengthTime}
+          incrementLengthTime={incrementSessionLengthTime}
+          decrementLengthTime={decrementSessionLengthTime}
+        />
+        <QuantitySelector
+          name="break"
+          lengthTime={breakLengthTime}
+          incrementLengthTime={incrementBreakLengthTime}
+          decrementLengthTime={decrementBreakLengthTime}
+        />
         <audio id="beep" preload="auto" ref={audioEl}>
           <source src="/src/assets/BeepSound.wav" type="audio/wav" />
           Your browser does not support the
