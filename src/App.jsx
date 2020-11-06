@@ -4,12 +4,13 @@ import CircularTimer from './components/CircularTimer';
 import QuantitySelector from './components/QuantitySelector';
 import StartStopBtn from './components/StartStopBtn';
 
-
 const initialTimerLabelState = 'Session';
 const initialIsTimerOnState = false;
 
 const initialSessionLengthState = 1500;
 const initialBreakLengthState = 300;
+
+let interval;
 
 function App() {
   const [timerLabel, setTimerLabel] = useState(initialTimerLabelState);
@@ -31,7 +32,7 @@ function App() {
   const audioEl = useRef(null);
 
   useEffect(() => {
-    console.log('switchTimer: ', timerLabel);
+    console.log('switchToTimer: ', timerLabel);
 
     if (timerLabel === initialTimerLabelState) {
       setTimeLeft(sessionLengthTime);
@@ -45,54 +46,52 @@ function App() {
   }, [timerLabel]);
 
   useEffect(() => {
-    let interval;
-
     if (isTimerOn) {
       interval = setInterval(() => {
-        setTimeLeft(timeLeft - 1);
-        console.log('timeLeft: ', timeLeft);
-
-        if (timeLeft === 1) {
-          function playAudio() {
-            let playPromise = audioEl.current.play();
-
-            if (playPromise !== undefined) {
-              playPromise
-                .then((_) => {
-                  setTimeout(() => {
-                    audioEl.current.pause();
-                    audioEl.current.currentTime = 0;
-                  }, 1000);
-                })
-                .catch((error) => {
-                  console.error('Error while play audio...', error);
-                });
-            }
-          }
-          playAudio();
-        }
-        if (timeLeft === 0) {
-          function switchTimer() {
-            if (timerLabel === initialTimerLabelState) {
-              setTimerLabel('Break');
-              setTimeLeft(sessionLengthTime);
-            } else {
-              setTimerLabel('Session');
-              setTimeLeft(breakLengthTime);
-            }
-          }
-          switchTimer();
-        }
+        setTimeLeft((timeLeft) => {
+          return timeLeft - 1;
+        });
       }, 1000);
     } else {
       clearInterval(interval);
     }
+  }, [isTimerOn]);
 
-    return () => {
-      clearInterval(interval);
-    };
+  useEffect(() => {
+    console.log('timeLeft: ', timeLeft);
+    if (timeLeft === 0) {
+      playAudio();
+      switchTimer();
+    }
+
+    function switchTimer() {
+      if (timerLabel === initialTimerLabelState) {
+        setTimerLabel('Break');
+        setTimeLeft(sessionLengthTime);
+      } else {
+        setTimerLabel('Session');
+        setTimeLeft(breakLengthTime);
+      }
+    }
+    function playAudio() {
+      let playPromise = audioEl.current.play();
+
+      if (playPromise !== undefined) {
+        playPromise
+          .then((_) => {
+            setTimeout(() => {
+              audioEl.current.pause();
+              audioEl.current.currentTime = 0;
+            }, 1000);
+          })
+          .catch((error) => {
+            console.error('Error while play audio...', error);
+          });
+      }
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isTimerOn, timeLeft]);
+  }, [timeLeft]);
 
   const incrementSessionLengthTime = (e) => {
     const newSessionLengthTime = sessionLengthTime + 60;
@@ -173,10 +172,7 @@ function App() {
             incrementLengthTime={incrementSessionLengthTime}
             decrementLengthTime={decrementSessionLengthTime}
           />
-          <StartStopBtn
-            isTimerOn={isTimerOn}
-            startStopTimer={startStopTimer}
-          />
+          <StartStopBtn isTimerOn={isTimerOn} startStopTimer={startStopTimer} />
           <QuantitySelector
             name="break"
             lengthTime={breakLengthTime}
