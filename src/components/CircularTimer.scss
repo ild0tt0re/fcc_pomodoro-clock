@@ -1,0 +1,23 @@
+$diameter: 20em;
+
+.countdown {
+  display: grid;
+  margin: 1em auto;
+  width: $diameter;
+  height: $diameter;
+}
+
+svg {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+[r] {
+  fill: none;
+  stroke: silver;
+
+  + [r] {
+    transform: rotate(-90deg);
+    // stroke-linecap: round;
+  }
+}

@@ -22,6 +22,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 - **ReactJS**: frontend library (set up with [create-react-app](https://github.com/facebook/create-react-app))
 - **SASS**: CSS pre-processors
+- **Web Animations API**
 
 ## SUMMARY
 

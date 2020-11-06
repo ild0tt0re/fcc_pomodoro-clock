@@ -12,6 +12,9 @@ const initialBreakLengthState = 300;
 function App() {
   const [timerLabel, setTimerLabel] = useState(initialTimerLabelState);
   const [timeLeft, setTimeLeft] = useState(initialSessionLengthState);
+  const [currentLengthTime, setCurrentLengthTime] = useState(
+    initialSessionLengthState
+  );
 
   const [sessionLengthTime, setSessionLengthTime] = useState(
     initialSessionLengthState
@@ -21,15 +24,21 @@ function App() {
   );
 
   const [isTimerOn, setIsTimerOn] = useState(initialIsTimerOnState);
+  const [circularTimerAnimation, setCircularTimerAnimation] = useState(null);
 
   const audioEl = useRef(null);
 
   useEffect(() => {
+    console.log('switchTimer: ', timerLabel);
+    
     if (timerLabel === initialTimerLabelState) {
       setTimeLeft(sessionLengthTime);
+      setCurrentLengthTime(sessionLengthTime);
     } else {
       setTimeLeft(breakLengthTime);
+      setCurrentLengthTime(breakLengthTime);
     }
+    circularTimerAnimation?.play();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timerLabel]);
 
@@ -84,35 +93,47 @@ function App() {
   }, [isTimerOn, timeLeft]);
 
   const incrementSessionLengthTime = (e) => {
-    setSessionLengthTime(sessionLengthTime + 60);
+    const newSessionLengthTime = sessionLengthTime + 60;
+    setSessionLengthTime(newSessionLengthTime);
     if (timerLabel === initialTimerLabelState) {
-      setTimeLeft(sessionLengthTime + 60);
+      setTimeLeft(newSessionLengthTime);
+      setCurrentLengthTime(newSessionLengthTime);
     }
   };
 
   const decrementSessionLengthTime = (e) => {
-    setSessionLengthTime(sessionLengthTime - 60);
+    const newSessionLengthTime = sessionLengthTime - 60;
+    setSessionLengthTime(newSessionLengthTime);
     if (timerLabel === initialTimerLabelState) {
-      setTimeLeft(sessionLengthTime - 60);
+      setTimeLeft(newSessionLengthTime);
+      setCurrentLengthTime(newSessionLengthTime);
     }
   };
 
   const incrementBreakLengthTime = (e) => {
-    setBreakLengthTime(breakLengthTime + 60);
+    const newBreakLengthTime = breakLengthTime + 60;
+    setBreakLengthTime(newBreakLengthTime);
     if (timerLabel !== initialTimerLabelState) {
-      setTimeLeft(breakLengthTime + 60);
+      setTimeLeft(newBreakLengthTime);
+      setCurrentLengthTime(newBreakLengthTime);
     }
   };
 
   const decrementBreakLengthTime = (e) => {
-    setBreakLengthTime(breakLengthTime - 60);
+    const newBreakLengthTime = breakLengthTime - 60;
+    setBreakLengthTime(newBreakLengthTime);
     if (timerLabel === !initialTimerLabelState) {
-      setTimeLeft(breakLengthTime - 60);
+      setTimeLeft(newBreakLengthTime);
+      setCurrentLengthTime(newBreakLengthTime);
     }
   };
 
   const startStopTimer = (e) => {
-    setIsTimerOn(!isTimerOn);
+    const toggleTimer = !isTimerOn;
+    setIsTimerOn(toggleTimer);
+    toggleTimer
+      ? circularTimerAnimation.play()
+      : circularTimerAnimation.pause();
   };
 
   const resetTimer = (e) => {
@@ -121,6 +142,9 @@ function App() {
     setSessionLengthTime(initialSessionLengthState);
     setBreakLengthTime(initialBreakLengthState);
     setTimeLeft(initialSessionLengthState);
+
+    circularTimerAnimation.currentTime = 0;
+    circularTimerAnimation.pause();
 
     if (!audioEl.current.paused) {
       audioEl.current.pause();
@@ -134,11 +158,15 @@ function App() {
         <CircularTimer
           timerLabel={timerLabel}
           timeLeft={timeLeft}
+          isTimerOn={isTimerOn}
+          currentLengthTime={currentLengthTime}
+          setAnimation={setCircularTimerAnimation}
           resetTimer={resetTimer}
         />
         <QuantitySelector
           name="session"
           lengthTime={sessionLengthTime}
+          isTimerOn={isTimerOn}
           incrementLengthTime={incrementSessionLengthTime}
           decrementLengthTime={decrementSessionLengthTime}
         />
@@ -148,6 +176,7 @@ function App() {
         <QuantitySelector
           name="break"
           lengthTime={breakLengthTime}
+          isTimerOn={isTimerOn}
           incrementLengthTime={incrementBreakLengthTime}
           decrementLengthTime={decrementBreakLengthTime}
         />

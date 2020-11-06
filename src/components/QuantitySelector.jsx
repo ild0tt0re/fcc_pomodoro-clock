@@ -2,8 +2,9 @@ import React from 'react';
 
 export default function QuantitySelector({
   name,
-  incrementLengthTime,
   lengthTime,
+  isTimerOn,
+  incrementLengthTime,
   decrementLengthTime,
 }) {
   return (
@@ -12,7 +13,7 @@ export default function QuantitySelector({
       <button
         id={`${name}-increment`}
         onClick={incrementLengthTime}
-        disabled={lengthTime / 60 === 60}
+        disabled={lengthTime / 60 === 60 || isTimerOn}
       >
         +
       </button>
@@ -20,7 +21,7 @@ export default function QuantitySelector({
       <button
         id={`${name}-decrement`}
         onClick={decrementLengthTime}
-        disabled={lengthTime / 60 === 1}
+        disabled={lengthTime / 60 === 1 || isTimerOn}
       >
         -
       </button>
