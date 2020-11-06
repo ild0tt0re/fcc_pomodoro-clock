@@ -30,7 +30,7 @@ function App() {
 
   useEffect(() => {
     console.log('switchTimer: ', timerLabel);
-    
+
     if (timerLabel === initialTimerLabelState) {
       setTimeLeft(sessionLengthTime);
       setCurrentLengthTime(sessionLengthTime);
@@ -38,7 +38,7 @@ function App() {
       setTimeLeft(breakLengthTime);
       setCurrentLengthTime(breakLengthTime);
     }
-    circularTimerAnimation?.play();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timerLabel]);
 

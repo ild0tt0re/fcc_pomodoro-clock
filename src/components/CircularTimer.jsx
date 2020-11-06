@@ -20,18 +20,21 @@ export default function CircularTimer({
   useEffect(() => {
     const ringAnimation = arcEl.current?.animate(
       [
-        { strokeDashoffset: 0, stroke: '#8a9b0f' },
-        { color: '#f8ca00' },
-        { color: '#e97f02' },
-        { color: '#bd1550' },
-        { strokeDashoffset: len, stroke: '#490a3d' },
+        { strokeDashoffset: 0, stroke: '#FF0000' },
+        { strokeDashoffset: len, stroke: '#face3e' },
       ],
       {
         duration: currentLengthTime * 1000,
         iterations: Infinity,
       }
     );
-    ringAnimation.pause();
+
+    if (isTimerOn) {
+      ringAnimation.currentTime = 0;
+      ringAnimation?.play();
+    } else {
+      ringAnimation.pause();
+    }
     console.log('ringAnimation: ', ringAnimation.effect.getComputedTiming());
     setAnimation(ringAnimation);
 
