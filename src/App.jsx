@@ -1,7 +1,9 @@
 import { useEffect, useState, useRef } from 'react';
+import './styles/App.scss';
 import CircularTimer from './components/CircularTimer';
 import QuantitySelector from './components/QuantitySelector';
-import './styles/App.scss';
+import StartStopBtn from './components/StartStopBtn';
+
 
 const initialTimerLabelState = 'Session';
 const initialIsTimerOnState = false;
@@ -171,9 +173,10 @@ function App() {
             incrementLengthTime={incrementSessionLengthTime}
             decrementLengthTime={decrementSessionLengthTime}
           />
-          <button id="start_stop" onClick={startStopTimer}>
-            {isTimerOn ? 'Pause' : 'Start'}
-          </button>
+          <StartStopBtn
+            isTimerOn={isTimerOn}
+            startStopTimer={startStopTimer}
+          />
           <QuantitySelector
             name="break"
             lengthTime={breakLengthTime}
