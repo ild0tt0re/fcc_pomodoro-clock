@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import './CircularTimer.scss';
+import { ReactComponent as ResetIcon } from '../assets/reset-icon.svg';
 
 export default function CircularTimer({
   timerLabel,
@@ -43,27 +44,26 @@ export default function CircularTimer({
 
   return (
     <>
-      <div className="timer-container">
-        <div className="countdown">
-          <svg viewBox={[o, o, d, d].join(' ')} strokeWidth={sw}>
-            <circle r={r}></circle>
-            <circle
-              ref={arcEl}
-              r={r}
-              strokeDasharray={len}
-              strokeDashoffset={`${len}px`}
-            ></circle>
-          </svg>
+      <div className="countdown">
+        <svg className="timerRing" viewBox={[o, o, d, d].join(' ')} strokeWidth={sw}>
+          <circle r={r}></circle>
+          <circle
+            ref={arcEl}
+            r={r}
+            strokeDasharray={len}
+            strokeDashoffset={`${len}px`}
+          ></circle>
+        </svg>
+        <div className="timer-container">
+          <div id="timer-label">{timerLabel}</div>
+          <div id="time-left">
+            {String(parseInt(timeLeft / 60)).padStart(2, 0)}:
+            {String(timeLeft - parseInt(timeLeft / 60) * 60).padStart(2, 0)}
+          </div>
+          <div id="reset" onClick={resetTimer}>
+            <ResetIcon />
+          </div>
         </div>
-
-        <div id="timer-label">{timerLabel}</div>
-        <div id="time-left">
-          {String(parseInt(timeLeft / 60)).padStart(2, 0)}:
-          {String(timeLeft - parseInt(timeLeft / 60) * 60).padStart(2, 0)}
-        </div>
-        <button id="reset" onClick={resetTimer}>
-          reset
-        </button>
       </div>
     </>
   );

@@ -163,23 +163,25 @@ function App() {
           setAnimation={setCircularTimerAnimation}
           resetTimer={resetTimer}
         />
-        <QuantitySelector
-          name="session"
-          lengthTime={sessionLengthTime}
-          isTimerOn={isTimerOn}
-          incrementLengthTime={incrementSessionLengthTime}
-          decrementLengthTime={decrementSessionLengthTime}
-        />
-        <button id="start_stop" onClick={startStopTimer}>
-          Start/Pause
-        </button>
-        <QuantitySelector
-          name="break"
-          lengthTime={breakLengthTime}
-          isTimerOn={isTimerOn}
-          incrementLengthTime={incrementBreakLengthTime}
-          decrementLengthTime={decrementBreakLengthTime}
-        />
+        <div className="timer-controls">
+          <QuantitySelector
+            name="session"
+            lengthTime={sessionLengthTime}
+            isTimerOn={isTimerOn}
+            incrementLengthTime={incrementSessionLengthTime}
+            decrementLengthTime={decrementSessionLengthTime}
+          />
+          <button id="start_stop" onClick={startStopTimer}>
+            {isTimerOn ? 'Pause' : 'Start'}
+          </button>
+          <QuantitySelector
+            name="break"
+            lengthTime={breakLengthTime}
+            isTimerOn={isTimerOn}
+            incrementLengthTime={incrementBreakLengthTime}
+            decrementLengthTime={decrementBreakLengthTime}
+          />
+        </div>
         <audio id="beep" preload="auto" ref={audioEl}>
           <source src="/src/assets/BeepSound.wav" type="audio/wav" />
           Your browser does not support the

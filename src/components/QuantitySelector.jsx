@@ -1,4 +1,5 @@
 import React from 'react';
+import './QuantitySelector.scss'
 
 export default function QuantitySelector({
   name,
@@ -17,7 +18,7 @@ export default function QuantitySelector({
       >
         +
       </button>
-      <div id={`${name}-length`}>{lengthTime / 60}</div>
+      <div id={`${name}-length`} className="length">{lengthTime / 60}</div>
       <button
         id={`${name}-decrement`}
         onClick={decrementLengthTime}

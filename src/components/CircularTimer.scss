@@ -5,19 +5,53 @@ $diameter: 20em;
   margin: 1em auto;
   width: $diameter;
   height: $diameter;
+  position: relative;
 }
 
-svg {
+.timerRing {
   grid-column: 1;
   grid-row: 1;
+
+  [r] {
+    fill: none;
+    stroke: silver;
+
+    + [r] {
+      transform: rotate(-90deg);
+      // stroke-linecap: round;
+    }
+  }
 }
 
-[r] {
-  fill: none;
-  stroke: silver;
+.timer-container {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 
-  + [r] {
-    transform: rotate(-90deg);
-    // stroke-linecap: round;
+  background: -webkit-linear-gradient(45deg,#FF0000,#face3e);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  #timer-label {
+    font-size: 20px;
+  }
+
+  #time-left {
+    font-size: 64px;
+    padding: 25px;
+  }
+  #reset {
+    font-size: 28px;
+    color: indianred;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    &:hover {
+      transform: scale(1.2);
+    }
   }
 }
